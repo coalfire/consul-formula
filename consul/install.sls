@@ -59,6 +59,7 @@ consul-install:
   file.rename:
     - name: /usr/local/bin/consul-{{ consul.version }}
     - source: /tmp/consul
+    - force: True
     - require:
       - file: /usr/local/bin
     - watch:
