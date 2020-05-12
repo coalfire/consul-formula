@@ -1,13 +1,15 @@
-{%- from slspath + '/map.jinja' import consul with context -%}
+{%- set tplroot = tpldir.split('/')[0] %}
+{%- from tplroot + '/map.jinja' import consul with context -%}
 
 consul-config:
   file.serialize:
     - name: /etc/consul.d/config.json
+    - encoding: utf-8
     - formatter: json
-    - dataset: {{ consul.config }}
+    - dataset: {{ consul.config | json }}
     - user: {{ consul.user }}
     - group: {{ consul.group }}
-    - mode: 0640
+    - mode: '0640'
     - require:
       - user: consul-user
     {%- if consul.service %}
@@ -24,7 +26,7 @@ consul-script-install-{{ loop.index }}:
     - context: {{ script.get('context', {}) | yaml }}
     - user: {{ consul.user }}
     - group: {{ consul.group }}
-    - mode: 0755
+    - mode: '0755'
 {% endfor %}
 
 consul-script-config:
@@ -40,4 +42,4 @@ consul-script-config:
       - user: consul-user
     - formatter: json
     - dataset:
-        services: {{ consul.register }}
+        services: {{ consul.register | json }}

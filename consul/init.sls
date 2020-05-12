@@ -1,6 +1,10 @@
-{% from slspath+"/map.jinja" import consul with context %}
+{%- set tplroot = tpldir.split('/')[0] %}
+{%- if pillar.get('consul', {}).get('enabled', True) %}
+{% from tplroot+"/map.jinja" import consul with context %}
 
 include:
-  - {{ slspath }}.install
-  - {{ slspath }}.config
-  - {{ slspath }}.service
+  - {{ tplroot }}.install
+  - {{ tplroot }}.config
+  - {{ tplroot }}.service
+
+{%- endif %}
